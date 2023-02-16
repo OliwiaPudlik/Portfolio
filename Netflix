@@ -1,0 +1,27 @@
+import pandas as pd
+
+df=pd.read_csv("/content/netflix_titles.csv", on_bad_lines='skip')
+
+new_df=df[['type','show_id']].copy()
+display(new_df)
+
+new_df['type'].unique()
+
+new_df2=new_df.groupby(['type']).count()
+display(new_df2)
+
+new_df3=df[['type','release_year','date_added']]
+new_df3.columns=['type','year','date']
+display(new_df3)
+
+new_df4=new_df3.groupby(['type','year']).count()
+new_df4=new_df4.reset_index()
+new_df4.columns=['type','year','sum']
+display(new_df4)
+
+import plotly.graph_objects as go
+import plotly.express as px
+
+fig = px.line(new_df4, x='year', y='date', 
+              color='type',title = 'Movies and TVseries grouped by release year')
+fig.show()
